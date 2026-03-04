@@ -26,59 +26,59 @@ Cursor:
 
 1. Keep OpenCode built-in primaries: `plan`, `build`.
 2. Copy only subagent files from `opencode/agents/` into your OpenCode agents directory.
-3. Keep `opencode/skills/` available so `prompt: "{file:...}"` references resolve.
+3. Keep `skills/` available under your OpenCode config directory (for example `~/.config/opencode/skills/`) so `prompt: "{file:...}"` references resolve.
 4. If you want custom behavior in built-in primaries, set the built-in `plan`/`build` prompt fields to use:
-   - `opencode/skills/plan/SKILL.md`
-   - `opencode/skills/build/SKILL.md`
+   - `skills/plan/SKILL.md`
+   - `skills/build/SKILL.md`
 5. Restart/reload OpenCode.
 
 ### OpenCode config patch (recommended)
 
-Use this in your existing `opencode.json` to keep built-in primaries (`plan`, `build`) while loading your custom skill prompts:
+Use this in your existing `opencode.json` to keep built-in primaries (`plan`, `build`) while loading your custom skill prompts. These paths are resolved relative to the config file directory (for example `~/.config/opencode/`):
 
 ```json
 {
   "agent": {
     "plan": {
-      "prompt": "{file:./opencode/skills/plan/SKILL.md}"
+      "prompt": "{file:./skills/plan/SKILL.md}"
     },
     "build": {
-      "prompt": "{file:./opencode/skills/build/SKILL.md}"
+      "prompt": "{file:./skills/build/SKILL.md}"
     },
     "implementor": {
       "description": "Scoped leaf executor for implementation tasks",
       "mode": "subagent",
-      "prompt": "{file:./opencode/skills/implementor/SKILL.md}"
+      "prompt": "{file:./skills/implementor/SKILL.md}"
     },
     "verifier": {
       "description": "Evidence-driven acceptance verifier",
       "mode": "subagent",
-      "prompt": "{file:./opencode/skills/verifier/SKILL.md}"
+      "prompt": "{file:./skills/verifier/SKILL.md}"
     },
     "debugger": {
       "description": "Diagnose-first bug orchestrator",
       "mode": "subagent",
-      "prompt": "{file:./opencode/skills/debugger/SKILL.md}"
+      "prompt": "{file:./skills/debugger/SKILL.md}"
     },
     "refactorer": {
       "description": "Behavior-preserving refactor orchestrator",
       "mode": "subagent",
-      "prompt": "{file:./opencode/skills/refactorer/SKILL.md}"
+      "prompt": "{file:./skills/refactorer/SKILL.md}"
     },
     "pr-reviewer": {
       "description": "Merge-readiness gatekeeper",
       "mode": "subagent",
-      "prompt": "{file:./opencode/skills/pr-reviewer/SKILL.md}"
+      "prompt": "{file:./skills/pr-reviewer/SKILL.md}"
     },
     "ui-designer": {
       "description": "UI specialist",
       "mode": "subagent",
-      "prompt": "{file:./opencode/skills/ui-designer/SKILL.md}"
+      "prompt": "{file:./skills/ui-designer/SKILL.md}"
     },
     "mentor": {
       "description": "Teaching overlay",
       "mode": "subagent",
-      "prompt": "{file:./opencode/skills/mentor/SKILL.md}"
+      "prompt": "{file:./skills/mentor/SKILL.md}"
     }
   }
 }
