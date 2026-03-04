@@ -1,128 +1,123 @@
-# AI Skills and Agent Setup
+# Using These Skills and Subagents
 
-This repository is organized into two parallel platforms with matching naming and structure:
+This README is a usage guide for the skill + agent packs in this repository.
 
-- `opencode/skills/` + `opencode/agents/`
-- `cursor/skills/` + `cursor/agents/`
+## Core Idea
 
-Both platforms now use the same 9 agent names:
-`plan`, `build`, `implementor`, `verifier`, `debugger`, `refactorer`, `pr-reviewer`, `ui-designer`, `mentor`.
+- A **skill** is the prompt content in `skills/<name>/SKILL.md`.
+- An **agent** is the runnable config in `agents/<name>.md` that loads a skill prompt.
 
-## What Changed
+Use the agent files to run workflows. Skill files are the behavior definitions behind them.
 
-The previous 12-skill layout had overlap. It is consolidated to 9:
+For OpenCode, use built-in primary agents (`plan`, `build`) and custom subagents from this repo.
 
-- `plan` merges Investigator + Architect + UX Reviewer
-- `build` merges Developer + Coordinator
-- 7 specialist skills remain focused and unchanged in intent:
-  `implementor`, `verifier`, `debugger`, `refactorer`, `pr-reviewer`, `ui-designer`, `mentor` (renamed from mentor-mode)
+## Agent Set
 
-This keeps all valuable guidance while removing repeated instructions.
+OpenCode (recommended):
+- Primary (built-in): `plan`, `build`
+- Custom subagents from this repo: `implementor`, `verifier`, `debugger`, `refactorer`, `pr-reviewer`, `ui-designer`, `mentor`
 
-## Skills vs Agents
+Cursor:
+- Use the included agent pack in `cursor/agents/` and matching prompts in `cursor/skills/`
 
-- A **skill** is the full behavior prompt (`skills/<name>/SKILL.md`).
-- An **agent** is the runtime configuration (`agents/<name>.md`) that loads a skill prompt and defines mode/tool access.
+## Setup
 
-In practice: agent config files are what you copy into your runtime agent directory, and they reference the corresponding skill prompt.
+### OpenCode setup (default)
 
-## OpenCode Strategy
+1. Keep OpenCode built-in primaries: `plan`, `build`.
+2. Copy only subagent files from `opencode/agents/` into your OpenCode agents directory.
+3. Keep `opencode/skills/` available so `prompt: "{file:...}"` references resolve.
+4. If you want custom behavior in built-in primaries, set the built-in `plan`/`build` prompt fields to use:
+   - `opencode/skills/plan/SKILL.md`
+   - `opencode/skills/build/SKILL.md`
+5. Restart/reload OpenCode.
 
-### Primary agents
+### Cursor setup
 
-| Agent | Mode | Purpose |
+1. Copy `cursor/agents/*.md` into your Cursor agent directory.
+2. Keep `cursor/skills/` alongside agent configs.
+3. Restart/reload Cursor agent runtime if needed.
+
+## When to Use Each Agent
+
+| Agent | Use it for | Typical output |
 | --- | --- | --- |
-| `plan` | primary (read-only) | Solution, architecture, and UX analysis before code |
-| `build` | primary (full tools) | Delivery agent: direct implementation for small tasks, delegation for larger tasks |
+| `plan` | read-only analysis of solution + architecture + UX (built-in primary in OpenCode) | options, trade-offs, recommendation |
+| `build` | primary delivery flow (built-in primary in OpenCode) | implementation plan, code changes, delegated tasks |
+| `implementor` | focused scoped coding task | minimal diff + verification notes |
+| `verifier` | acceptance criteria checks | evidence-backed verdict |
+| `debugger` | diagnose-first bug flow | root cause, fix plan, validated fix |
+| `refactorer` | behavior-preserving cleanup | phased refactor with safety checks |
+| `pr-reviewer` | merge gate | review findings, tests/coverage/mergeability status |
+| `ui-designer` | UI implementation | design-system-consistent, accessible UI changes |
+| `mentor` | teaching overlay | layered explanations without changing workflow constraints |
 
-### Subagents
+## Delegation and Automation
 
-| Agent | Role |
-| --- | --- |
-| `implementor` | Leaf executor for scoped implementation tasks |
-| `verifier` | Evidence-based acceptance verification |
-| `debugger` | Diagnose-first bug orchestrator |
-| `refactorer` | Behavior-preserving refactor orchestrator |
-| `pr-reviewer` | Merge-readiness gatekeeper (review + tests + coverage) |
-| `ui-designer` | UI specialist with accessibility constraints |
-| `mentor` | Teaching overlay that preserves active workflow constraints |
+### What you call manually
 
-## Delegation Mechanics (Task Tool)
+- Start analysis with `plan`.
+- Start delivery with `build`.
+- Run final gate with `pr-reviewer`.
+- Invoke `mentor` when you want teaching mode.
 
-When a skill says "delegate to Implementor" or "delegate to Verifier", this means:
+### What should be automated
 
-1. The current agent invokes the **Task** tool.
-2. The Task call targets a configured subagent (for example `implementor`).
-3. The subagent executes scoped work and reports results back.
+Inside delivery flows, let agents delegate with Task tool:
 
-Built-in OpenCode subagents (`general`, `explore`) are still useful utility agents. Your custom subagents add stronger, workflow-specific behavior (micro-TDD, strict gate checks, review criteria, etc.).
+- `build -> implementor` for scoped implementation
+- `build -> verifier` for acceptance checks
+- `debugger -> implementor -> verifier`
+- `refactorer -> implementor -> verifier`
+- `pr-reviewer -> implementor` for fixes and `-> verifier` for re-checks
 
-## End-to-End Workflow
+## Standard Workflow (Feature)
 
-1. **Understand**: `plan`
-2. **Implement**: `build` (directly or via `implementor`)
-3. **Verify**: `verifier`
-4. **Review/Merge gate**: `pr-reviewer`
+1. **Analyze**
+   - Call `plan` to evaluate options and pick a direction.
+2. **Implement**
+   - Call `build` with approved scope and acceptance criteria.
+3. **Verify**
+   - Call `verifier` for evidence-driven acceptance validation.
+4. **Review**
+   - Call `pr-reviewer` for final merge readiness (review + tests + coverage).
 
-Utility paths:
+## Standard Workflow (UI Feature)
 
-- Bugs: `debugger -> implementor -> verifier`
-- Refactors: `refactorer -> implementor -> verifier`
-- UI-heavy work: `ui-designer` (optionally with `verifier`)
-- Learning mode: `mentor` overlay on any stage
+1. `plan` for UX + implementation options.
+2. `build` to execute the approved approach.
+3. `ui-designer` for UI-heavy slices (usually delegated by `build`).
+4. `verifier` to validate acceptance criteria and accessibility outcomes.
+5. `pr-reviewer` to confirm merge readiness.
+
+## Copy/Paste Prompts
+
+### Kickoff in `plan`
+
+`Analyze this feature request and provide solution options, architecture implications, UX risks, and a recommendation. Do not edit code.`
+
+### Handoff to `build`
+
+`Implement the approved approach using the acceptance criteria below. Delegate where useful and keep scope tight.`
+
+### Verification
+
+`Verify this implementation strictly against acceptance criteria. Provide evidence and verdict.`
+
+### Merge gate
+
+`Review this change for merge readiness. Report high-confidence issues, test status, coverage status, and remaining blockers.`
 
 ## Folder Layout
 
 ```text
 opencode/
   skills/
-    plan/SKILL.md
-    build/SKILL.md
-    implementor/SKILL.md
-    verifier/SKILL.md
-    debugger/SKILL.md
-    refactorer/SKILL.md
-    pr-reviewer/SKILL.md
-    ui-designer/SKILL.md
-    mentor/SKILL.md
   agents/
-    plan.md
-    build.md
-    implementor.md
-    verifier.md
-    debugger.md
-    refactorer.md
-    pr-reviewer.md
-    ui-designer.md
-    mentor.md
 
 cursor/
   skills/
-    plan/SKILL.md
-    build/SKILL.md
-    implementor/SKILL.md
-    verifier/SKILL.md
-    debugger/SKILL.md
-    refactorer/SKILL.md
-    pr-reviewer/SKILL.md
-    ui-designer/SKILL.md
-    mentor/SKILL.md
   agents/
-    plan.md
-    build.md
-    implementor.md
-    verifier.md
-    debugger.md
-    refactorer.md
-    pr-reviewer.md
-    ui-designer.md
-    mentor.md
 ```
 
-## Cursor Section
-
-Cursor mirrors the same agent names and layout for consistency. Prompt content is Cursor-flavored, but workflow intent is aligned with OpenCode:
-
-- `plan` for read-only analysis
-- `build` for plan-first delivery
-- specialist skills for implementation, verification, debugging, refactoring, PR gating, UI, and mentoring
+OpenCode note: `opencode/agents/` includes subagents only. Use built-in OpenCode `plan` and `build` as primaries.
