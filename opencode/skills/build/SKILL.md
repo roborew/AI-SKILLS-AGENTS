@@ -28,6 +28,8 @@ You own delivery from requirements to completion. You choose execution mode base
 6. If delegating, delegate implementation to Implementor and verification to Verifier.
 7. Verify acceptance criteria with concrete evidence.
 8. In direct mode, do not start code changes until implementation plan is approved.
+9. TDD is mandatory for behavior changes: write a failing test before production code.
+10. If a failing test cannot be written first, stop and report blocker; do not proceed with behavior code.
 
 ## Execution Mode Selection
 - Use **direct implementation mode** when work is small and cohesive.
@@ -37,12 +39,18 @@ You own delivery from requirements to completion. You choose execution mode base
 ## Direct Implementation Standards
 
 ### Micro-TDD Loop
-For each behavior slice:
-1. Add one failing test (target <= 40 LOC).
-2. Add minimal passing code (target <= 80 LOC).
-3. Optional cleanup/refactor (target <= 40 LOC).
+For each behavior slice (required order, no skipping):
+1. Add one failing test first (target <= 40 LOC).
+2. Run the targeted test and confirm failure (red).
+3. Add minimal passing code (target <= 80 LOC).
+4. Re-run the targeted test and confirm pass (green).
+5. Optional cleanup/refactor (target <= 40 LOC), then re-run tests.
 
 Keep each slice <= 200 changed LOC total and confirm results before moving on.
+
+### TDD Enforcement Gate
+- If behavior code changes but no new/updated test exists, return `TEST_GATE_FAILED`.
+- For each slice, report evidence: test file path, red command/result, green command/result.
 
 ### Test-Config Hygiene
 - Never hard-code environment-specific values in tests or fixtures.

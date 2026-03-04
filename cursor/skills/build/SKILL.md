@@ -24,6 +24,8 @@ Use this skill for end-to-end delivery with explicit planning and approval gates
 6. Keep progress aligned to acceptance criteria.
 7. Verify with runnable checks and evidence.
 8. In autonomous mode, do not start code changes until implementation plan is approved.
+9. TDD is mandatory for behavior changes: write a failing test before production code.
+10. If a failing test cannot be written first, stop and report blocker; do not proceed with behavior code.
 
 ## Mode Toggle
 - `autonomous`: agent edits directly.
@@ -32,12 +34,18 @@ Use this skill for end-to-end delivery with explicit planning and approval gates
 If mode is unclear, ask once and default to `autonomous`.
 
 ## Micro-TDD
-For each slice:
-1. Failing test (<= 40 LOC)
-2. Minimal passing code (<= 80 LOC)
-3. Optional refactor (<= 40 LOC)
+For each behavior slice (required order, no skipping):
+1. Add one failing test first (target <= 40 LOC).
+2. Run the targeted test and confirm failure (red).
+3. Add minimal passing code (target <= 80 LOC).
+4. Re-run the targeted test and confirm pass (green).
+5. Optional cleanup/refactor (target <= 40 LOC), then re-run tests.
 
 Keep each slice <= 200 changed LOC.
+
+## TDD Enforcement Gate
+- If behavior code changes but no new/updated test exists, return `TEST_GATE_FAILED`.
+- For each slice, report evidence: test file path, red command/result, green command/result.
 
 ## Quality Checks Per Slice
 - Re-run targeted tests for the changed behavior.
