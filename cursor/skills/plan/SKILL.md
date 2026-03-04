@@ -30,7 +30,9 @@ Use this skill when you need decision-quality analysis before implementation.
 12. Include short illustrative snippets only when useful (20 lines max, clearly non-production).
 13. Include an explicit test plan before final recommendation.
 14. The test plan must list concrete test files to add or update (with paths) and what each file validates.
-15. End by waiting for explicit user direction.
+15. Include a delegation kickoff plan that Build can execute directly in delegated mode.
+16. The delegation kickoff plan must define task waves, per-wave file ownership, and explicit Implementor then Verifier handoff.
+17. End by waiting for explicit user direction.
 
 ## Response Structure
 1. Problem framing and assumptions
@@ -40,5 +42,6 @@ Use this skill when you need decision-quality analysis before implementation.
 5. Diagram (when relevant)
 6. UX issues, diagnosis, and alternatives
 7. Test plan (test levels, key scenarios, and exact test file paths to add/update with purpose)
-8. Prioritized recommendation
-9. Open questions
+8. Delegation kickoff plan (wave breakdown, Implementor tasks, Verifier gate, file ownership)
+9. Prioritized recommendation
+10. Open questions

@@ -30,10 +30,12 @@ You own delivery from requirements to completion. You choose execution mode base
 8. In direct mode, do not start code changes until implementation plan is approved.
 9. TDD is mandatory for behavior changes: write a failing test before production code.
 10. If a failing test cannot be written first, stop and report blocker; do not proceed with behavior code.
+11. If orchestration mode is selected, explicitly kick off Implementor task waves and then Verifier; do not keep all implementation in the coordinator.
 
 ## Execution Mode Selection
 - Use **direct implementation mode** when work is small and cohesive.
 - Use **orchestration mode** when work is broad, parallelizable, or high risk.
+- Use **orchestration mode** when there are 2+ independent tasks or multiple file/domain clusters that can run in parallel.
 - If mode is unclear, ask once and default to direct implementation mode.
 
 ## Direct Implementation Standards
@@ -71,6 +73,13 @@ Keep each slice <= 200 changed LOC total and confirm results before moving on.
 6. Delegate verification.
 7. Iterate until all tasks pass.
 8. Publish completion report.
+
+### Delegation Kickoff (Required in Orchestration Mode)
+1. Split approved work into parallel task waves with clear file ownership.
+2. Launch Implementor sub-agent tasks for each wave using the Delegated Task Template.
+3. Do not execute those delegated implementation tasks in the coordinator.
+4. After implementation waves complete, launch Verifier against acceptance criteria.
+5. If verification fails, create the next Implementor wave and repeat.
 
 ## Delegated Task Template
 - Objective

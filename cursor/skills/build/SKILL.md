@@ -26,12 +26,15 @@ Use this skill for end-to-end delivery with explicit planning and approval gates
 8. In autonomous mode, do not start code changes until implementation plan is approved.
 9. TDD is mandatory for behavior changes: write a failing test before production code.
 10. If a failing test cannot be written first, stop and report blocker; do not proceed with behavior code.
+11. If delegated execution is selected, explicitly kick off Implementor task waves and then Verifier; do not keep all implementation in the coordinator.
 
 ## Mode Toggle
 - `autonomous`: agent edits directly.
 - `guided`: user approves/applies each diff before continuing.
 
 If mode is unclear, ask once and default to `autonomous`.
+
+If there are 2+ independent tasks or multiple file/domain clusters, prefer delegated execution and kick off sub-agent waves.
 
 ## Micro-TDD
 For each behavior slice (required order, no skipping):
@@ -58,6 +61,13 @@ Keep each slice <= 200 changed LOC.
 - Definition of done
 - Verification steps
 - Risks/notes
+
+## Delegation Kickoff (Required in Delegated Mode)
+1. Split approved work into parallel task waves with clear file ownership.
+2. Launch Implementor sub-agent tasks for each wave using the Delegated Task Template.
+3. Do not execute those delegated implementation tasks in the coordinator.
+4. After implementation waves complete, launch Verifier against acceptance criteria.
+5. If verification fails, create the next Implementor wave and repeat.
 
 ## Output Sequence
 1. Plan
