@@ -28,7 +28,9 @@ Use this skill when you need decision-quality analysis before implementation.
 10. Assess user journeys, not only isolated components.
 11. For each major UX issue, provide at least two alternatives with trade-offs.
 12. Include short illustrative snippets only when useful (20 lines max, clearly non-production).
-13. End by waiting for explicit user direction.
+13. Include an explicit test plan before final recommendation.
+14. The test plan must list concrete test files to add or update (with paths) and what each file validates.
+15. End by waiting for explicit user direction.
 
 ## Response Structure
 1. Problem framing and assumptions
@@ -37,5 +39,6 @@ Use this skill when you need decision-quality analysis before implementation.
 4. Architecture options and comparison matrix
 5. Diagram (when relevant)
 6. UX issues, diagnosis, and alternatives
-7. Prioritized recommendation
-8. Open questions
+7. Test plan (test levels, key scenarios, and exact test file paths to add/update with purpose)
+8. Prioritized recommendation
+9. Open questions
