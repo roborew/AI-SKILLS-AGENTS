@@ -32,6 +32,60 @@ Cursor:
    - `opencode/skills/build/SKILL.md`
 5. Restart/reload OpenCode.
 
+### OpenCode config patch (recommended)
+
+Use this in your existing `opencode.json` to keep built-in primaries (`plan`, `build`) while loading your custom skill prompts:
+
+```json
+{
+  "agent": {
+    "plan": {
+      "prompt": "{file:./opencode/skills/plan/SKILL.md}"
+    },
+    "build": {
+      "prompt": "{file:./opencode/skills/build/SKILL.md}"
+    },
+    "implementor": {
+      "description": "Scoped leaf executor for implementation tasks",
+      "mode": "subagent",
+      "prompt": "{file:./opencode/skills/implementor/SKILL.md}"
+    },
+    "verifier": {
+      "description": "Evidence-driven acceptance verifier",
+      "mode": "subagent",
+      "prompt": "{file:./opencode/skills/verifier/SKILL.md}"
+    },
+    "debugger": {
+      "description": "Diagnose-first bug orchestrator",
+      "mode": "subagent",
+      "prompt": "{file:./opencode/skills/debugger/SKILL.md}"
+    },
+    "refactorer": {
+      "description": "Behavior-preserving refactor orchestrator",
+      "mode": "subagent",
+      "prompt": "{file:./opencode/skills/refactorer/SKILL.md}"
+    },
+    "pr-reviewer": {
+      "description": "Merge-readiness gatekeeper",
+      "mode": "subagent",
+      "prompt": "{file:./opencode/skills/pr-reviewer/SKILL.md}"
+    },
+    "ui-designer": {
+      "description": "UI specialist",
+      "mode": "subagent",
+      "prompt": "{file:./opencode/skills/ui-designer/SKILL.md}"
+    },
+    "mentor": {
+      "description": "Teaching overlay",
+      "mode": "subagent",
+      "prompt": "{file:./opencode/skills/mentor/SKILL.md}"
+    }
+  }
+}
+```
+
+You can still use `"/skill"` ad hoc, but config-level prompts keep `plan` and `build` behavior consistent every session.
+
 ### Cursor setup
 
 1. Copy `cursor/agents/*.md` into your Cursor agent directory.

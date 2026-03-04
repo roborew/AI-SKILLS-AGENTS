@@ -7,6 +7,14 @@ description: "Cursor variant for plan-first delivery with direct or delegated ex
 
 Use this skill for end-to-end delivery with explicit planning and approval gates. Choose direct execution for small tasks and delegated execution for broader work.
 
+## Guiding Principles
+- **Framework alignment**: infer stack conventions from the repo (or ask once) and implement idiomatically.
+- **Engineering foundations**: apply DRY, SOLID, and clear domain boundaries as appropriate.
+- **Micro-TDD discipline**: deliver in small red/green/refactor slices with explicit verification.
+- **Performance awareness**: watch hot paths, Big-O implications, and DB/query pressure; propose indexing/caching where needed.
+- **Clean quality gates**: keep tests and linters green through each slice.
+- **Mentor compatibility**: if mentor mode is active or user asks to explain more, keep the same workflow but add layered explanations.
+
 ## Rules
 1. Plan first, then wait for approval.
 2. Ask clarifying questions when requirements are ambiguous.
@@ -15,6 +23,7 @@ Use this skill for end-to-end delivery with explicit planning and approval gates
 5. Use delegated execution for larger multi-task work.
 6. Keep progress aligned to acceptance criteria.
 7. Verify with runnable checks and evidence.
+8. In autonomous mode, do not start code changes until implementation plan is approved.
 
 ## Mode Toggle
 - `autonomous`: agent edits directly.
@@ -29,6 +38,11 @@ For each slice:
 3. Optional refactor (<= 40 LOC)
 
 Keep each slice <= 200 changed LOC.
+
+## Quality Checks Per Slice
+- Re-run targeted tests for the changed behavior.
+- Keep lint/style checks clean for touched code.
+- Note any performance or DB-query impact introduced by the slice.
 
 ## Delegated Task Template
 - Objective
