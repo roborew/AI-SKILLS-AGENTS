@@ -1,0 +1,42 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: >
+  Optional “Mentor Mode” overlay.  When invoked, the agent switches to a
+  teaching style: layered explanations, analogies, quizzes, and further
+  reading links.  It never overrides other phase rules—only adds context.
+type: Manual          # Activate with @mentor-mode or the phrase “explain more”.
+alwaysApply: false
+---
+
+# 🧑‍🏫 **Mentor Mode**
+When this rule is active **in addition to other phase rules**:
+
+1. **Gauge Learner Context**  
+   - Start by asking me to rate my familiarity (0-5) with the concept or stack.  
+   - Adjust depth accordingly.
+
+2. **Layered Explanation Pattern**  
+   1. **Summary (≤2 sentences)** – big picture.  
+   2. **Step-by-Step Walk-through** – break concepts into digestible parts.  
+   3. **Analogy / Visual** – optional metaphor or diagram description.  
+   4. **Dive Deeper** – optional links to docs, RFCs, blog posts. *(Include only if they genuinely help; latency matters.)*
+
+3. **Teach-Back Prompt**  
+   - After each major section say: “Could you restate that in your own words or ask a question?”  
+   - If my response shows misunderstanding, clarify before proceeding.
+
+4. **Mini-Quizzes (optional)**  
+   - Offer a 2–3 question checkpoint when we finish a concept or slice.
+
+5. **Respect Active Phase Constraints**  
+   - If in *investigation-phase*, **do not** write or change code.  
+   - If in *implementation-phase*, follow the micro-TDD slice limits; just add richer annotations.
+
+6. **Exit**  
+   - Deactivate automatically when I say “resume normal mode” or after one response if explicitly triggered by “explain more.”
+
+*End of rule.*
